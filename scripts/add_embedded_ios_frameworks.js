@@ -117,19 +117,20 @@ module.exports = function(context) {
         var fileRef = getFileRefFromName(myProj, justFrameworkFile);
         var fileId = getFileIdAndRemoveFromFrameworks(myProj, justFrameworkFile);
 
-        // Adding PBXBuildFile for embedded frameworks
-        var file = {
-            uuid: fileId,
-            basename: justFrameworkFile,
-            settings: {
-                ATTRIBUTES: ["CodeSignOnCopy", "RemoveHeadersOnCopy"]
-            },
+        if(parseInt(context.opts.cordova.version) < 7) {
+            // Adding PBXBuildFile for embedded frameworks
+            var file = {
+                uuid: fileId,
+                basename: justFrameworkFile,
+                settings: {
+                    ATTRIBUTES: ["CodeSignOnCopy", "RemoveHeadersOnCopy"]
+                },
 
-            fileRef:fileRef,
-            group:groupName
-        };
-        myProj.addToPbxBuildFileSection(file);
-
+                fileRef:fileRef,
+                group:groupName
+            };
+            myProj.addToPbxBuildFileSection(file);
+        }
 
         // Adding to Frameworks as well (separate PBXBuildFile)
         var newFrameworkFileEntry = {
